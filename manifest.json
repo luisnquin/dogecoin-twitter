@@ -1,0 +1,22 @@
+{
+    "name": "Doge coin twitter",
+    "description": "The best decision Musk has ever made",
+    "version": "1.0",
+    "manifest_version": 3,
+    "icons": {
+        "48": "/assets/logo.png",
+        "128": "/assets/logo.png"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["/assets/logo.png", "/assets/favicon.png"],
+            "matches": ["https://twitter.com/*"]
+        }
+    ],
+    "content_scripts": [
+        {
+            "js": ["scripts/index.js"],
+            "matches": ["https://twitter.com/*"]
+        }
+    ]
+}
