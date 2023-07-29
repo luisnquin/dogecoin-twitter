@@ -1,15 +1,24 @@
-// Set favicon
-document.querySelector("link[rel~='icon']").href = chrome.runtime.getURL('../assets/favicon.png')
+const TWITTER_PATH = '../assets/twitter.png'
+const DOGE_PATH = '../assets/doge.png'
 
-function waitForElement(selector) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+const waitForElement = async (selector) => {
+    while (!document.body) {
+        await sleep(10)
+    }
+
     return new Promise((resolve) => {
+        console.log(`waiting for ${selector}!`)
+
         if (document.querySelector(selector)) {
             return resolve(document.querySelector(selector))
         }
 
         const observer = new MutationObserver((_) => {
-            if (document.querySelector(selector)) {
-                resolve(document.querySelector(selector))
+            const element = document.querySelector(selector)
+            if (element) {
+                resolve(element)
                 observer.disconnect()
             }
         })
@@ -21,17 +30,12 @@ function waitForElement(selector) {
     })
 }
 
-waitForElement('[aria-label="Loading…"]').then((container) => {
-    container.innerHTML = ''
-})
-
-waitForElement('[aria-label="Twitter"]').then((element) => {
-    const container = element.children[0]
-    container.innerHTML = ''
-
-    const icon = document.createElement('img')
-    icon.src = chrome.runtime.getURL('../assets/logo.png')
-    icon.height = 42
-    icon.width = 42
-    container.appendChild(icon)
+waitForElement('[aria-label="Loading…"]').then((element) => {
+    const originalLogo = element.children[0]
+    const newLogo = document.createElement('img')
+    newLogo.src = chrome.runtime.getURL(TWITTER_PATH)
+    newLogo.height = 55
+    newLogo.width = 55
+    newLogo.classList = originalLogo.classList
+    element.replaceChild(newLogo, originalLogo)
 })
